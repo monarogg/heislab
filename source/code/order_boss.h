@@ -1,13 +1,17 @@
+#pragma once
 #include "../driver/elevio.h"
+#include "state_machine.h"
 
 
-// bestillinger er av typen buttontype. altså enten 0, 1 eller 2 
 
-// orders er en liste? eller array eller noe av order av typen buttontype
+typedef enum {
+    order_up = 1,
+    order_down = -1,
+    order_all = 2,
+} Orders;
 
-void add_order(ButtonType order);
-// egt være av typen bestilling,men har ikke lagd enda.
+void add_order(Orders order, struct Elevator e);
 
-void remove_order(ButtonType order);
-void empty_orders(); 
+void remove_order(Orders order, struct Elevator e);
+void empty_orders(struct Elevator e); 
 //tømmer hele listen

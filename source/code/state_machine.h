@@ -1,4 +1,6 @@
+#pragma once
 #include "../driver/elevio.h"
+
 
 typedef enum {
     moving_down = -1,
@@ -7,10 +9,15 @@ typedef enum {
     door_open = 2,
     door_closed = 3,
     stop_in_shaft = 4,
-
+    stop_at_floor = 5,
+    inactive = 6,
+    initial = 7,
 } States;
 
-// lage en oversikt over states. type?
-// må inneholde kjører, bevger + retning, dør åpen, står stille i etasje,...
+void initial_position(); 
 
-//switch case?
+typedef struct Elevator {
+    States state;
+    int queue[N_FLOORS][N_BUTTONS];
+};
+

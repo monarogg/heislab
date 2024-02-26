@@ -3,6 +3,8 @@
 #include <signal.h>
 #include <time.h>
 #include "driver/elevio.h"
+#include "code/state_machine.h"
+#include "code/door.h"
 
 
 
@@ -12,44 +14,47 @@ int main(){
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
 
-    elevio_motorDirection(DIRN_UP);
-
-    while(1){
-    //     int floor = elevio_floorSensor();
-
-    //     if(floor == 0){
-    //         elevio_motorDirection(DIRN_UP);
-    //     }
-
-    //     if(floor == N_FLOORS-1){
-    //         elevio_motorDirection(DIRN_DOWN);
-    //     }
-
-
-    //     for(int f = 0; f < N_FLOORS; f++){
-    //         for(int b = 0; b < N_BUTTONS; b++){
-    //             int btnPressed = elevio_callButton(f, b);
-    //             elevio_buttonLamp(f, b, btnPressed);
-    //         }
-    //     }
-
-    //     if(elevio_obstruction()){
-    //         elevio_stopLamp(1);
-    //     } else {
-    //         elevio_stopLamp(0);
-    //     }
-        
-    //     if(elevio_stopButton()){
-    //         elevio_motorDirection(DIRN_STOP);
-    //         break;
-    //     }
-        
-    //     nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
-
-    if (elevio_callButton(2, 1) == 1) {
-        printf("Hello");
+    struct Elevator elevator;
+    // initialiserer elevator:
+    elevator.state = 7;
+    for (int i = 0; i < N_FLOORS; i++){
+        for (int j = 0; j < N_BUTTONS; j++){
+            elevator.queue[i][j] = 0;
+        }
     }
 
+    elevio_doorOpenLamp(0);
+
+    while(1){
+
+
+    switch (elevator.state)
+    {
+    case moving_down:
+        elevio_motorDirection(DIRN_DOWN);
+        break;
+
+    case moving_up:
+        elevio_motorDirection(DIRN_UP);
+        break;
+
+    case initial:
+        initial_position();
+        elevator.state = 2;
+        break;
+
+    case door_open:
+        open_door(elevator);
+        break;
+
+    case door_closed:
+        close_door(elevator);
+        break;
+
+
+    default:
+        break;
+    }
     }
 
     return 0;
