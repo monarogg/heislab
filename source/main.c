@@ -40,17 +40,9 @@ int main(){
 
     case initial:
         initial_position();
-        elevator.state = 2;
+        elevator.current_floor = 0;
+        open_door();
         break;
-
-    case door_open:
-        open_door(elevator);
-        break;
-
-    case door_closed:
-        close_door(elevator);
-        break;
-
 
     default:
         break;

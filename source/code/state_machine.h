@@ -3,21 +3,19 @@
 
 
 typedef enum {
-    moving_down = -1,
+    moving = -1,
     moving_up = 1,
-    still_at_floor = 0,
-    door_open = 2,
-    door_closed = 3,
-    stop_in_shaft = 4,
-    stop_at_floor = 5,
-    inactive = 6,
-    initial = 7,
+    still = 0,
+    inactive = 3,
+    initial = 4,
 } States;
 
 void initial_position(); 
 
 typedef struct Elevator {
     States state;
+    int current_floor;
+    int emergency;
     int queue[N_FLOORS][N_BUTTONS];
 };
 
