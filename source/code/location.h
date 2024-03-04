@@ -1,6 +1,6 @@
 #pragma once
 #include "../driver/elevio.h"
+#include "state_machine.h"
 
+void compare_floors(Elevator *e);
 
-void compare_floors(int destination_floor, int current_floor);
-void motor_dir(MotorDirection direction);

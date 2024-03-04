@@ -10,9 +10,13 @@ typedef enum {
     order_all = 2,
 } Orders;
 
-void add_order(int floor, int numbers, struct Elevator e);
+void add_order(int floor, int numbers, Elevator *e);
 
-void remove_order(int floor, struct Elevator e);
+void remove_order(int floor, Elevator *e);
 
-void empty_orders(struct Elevator e); 
+void empty_orders(Elevator *e); 
 //tømmer hele listen
+
+void check_buttons(Elevator *e);
+
+void check_orders(Elevator *e);

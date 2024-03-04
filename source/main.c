@@ -5,6 +5,8 @@
 #include "driver/elevio.h"
 #include "code/state_machine.h"
 #include "code/door.h"
+#include "code/order_boss.h"
+#include "code/location.h"
 
 
 
@@ -14,35 +16,77 @@ int main(){
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
 
-    struct Elevator elevator;
+    Elevator elevator;
     // initialiserer elevator:
-    elevator.state = 7;
+    elevator.state = initial;
     for (int i = 0; i < N_FLOORS; i++){
         for (int j = 0; j < N_BUTTONS; j++){
             elevator.queue[i][j] = 0;
         }
     }
+    //elevator.current_floor = elevio_floorSensor();
 
     elevio_doorOpenLamp(0);
 
     while(1){
 
+    check_buttons(&elevator);
+    check_orders(&elevator);
 
     switch (elevator.state)
     {
+
     case moving_down:
         elevio_motorDirection(DIRN_DOWN);
+        if (elevator.destination == elevio_floorSensor()) {
+            elevio_motorDirection(DIRN_STOP);
+            elevator.current_floor = elevator.destination;
+            elevator.state = still;
+        }
+        check_buttons(&elevator);
+        check_orders(&elevator);        
         break;
 
     case moving_up:
         elevio_motorDirection(DIRN_UP);
+        if (elevator.destination == elevio_floorSensor()) {
+            elevio_motorDirection(DIRN_STOP);
+            elevator.current_floor = elevator.destination;
+            elevator.state = still;
+        }
+        check_buttons(&elevator);
+        check_orders(&elevator);
         break;
 
     case initial:
-        initial_position();
-        elevator.current_floor = 0;
-        open_door();
+        elevator.destination = 0;
+        initial_position(&elevator);
+        elevator.current_floor = elevio_floorSensor();
+        elevator.last_floor = elevator.current_floor;
+        check_buttons(&elevator);
+        check_orders(&elevator);
         break;
+
+    case still:
+        if (elevator.current_floor != -1) {
+            open_door(&elevator);
+            elevator.current_floor = elevio_floorSensor();
+            elevator.last_floor = elevator.current_floor;
+            elevator.state = inactive;
+        }
+        check_buttons(&elevator);
+        check_orders(&elevator);
+        break;
+
+    case inactive:
+        check_buttons(&elevator);
+        compare_floors(&elevator);
+        check_orders(&elevator);
+        break;
+        
+    //case stop:
+
+
 
     default:
         break;
