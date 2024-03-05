@@ -30,8 +30,11 @@ int main(){
 
     while(1){
 
+    //skal vi kanskje ikke sjekke disse før etter at har nådd start tilstand?
     check_buttons(&elevator);
     check_orders(&elevator);
+    check_emergency(&elevator);
+    check_obstruction(&elevator);    
 
     switch (elevator.state)
     {
@@ -44,7 +47,9 @@ int main(){
             elevator.state = still;
         }
         check_buttons(&elevator);
-        check_orders(&elevator);        
+        check_orders(&elevator);
+        check_emergency(&elevator);
+        check_obstruction(&elevator);    
         break;
 
     case moving_up:
@@ -56,6 +61,8 @@ int main(){
         }
         check_buttons(&elevator);
         check_orders(&elevator);
+        check_emergency(&elevator);
+        check_obstruction(&elevator);
         break;
 
     case initial:
@@ -65,6 +72,8 @@ int main(){
         elevator.last_floor = elevator.current_floor;
         check_buttons(&elevator);
         check_orders(&elevator);
+        check_emergency(&elevator);
+        check_obstruction(&elevator);
         break;
 
     case still:
@@ -76,16 +85,18 @@ int main(){
         }
         check_buttons(&elevator);
         check_orders(&elevator);
+        check_emergency(&elevator);
+        check_obstruction(&elevator);
         break;
 
     case inactive:
+        light_off(elevator.current_floor); // la til dette for å slukke lys
         check_buttons(&elevator);
         compare_floors(&elevator);
         check_orders(&elevator);
+        check_emergency(&elevator);
+        check_obstruction(&elevator);
         break;
-        
-    //case stop:
-
 
 
     default:

@@ -28,6 +28,7 @@ void start_timer(Elevator *e){
     
     //lukker dør:
     elevio_doorOpenLamp(0);
+    e->open_door = 0;
 }
 
 //funksjon for obstruction

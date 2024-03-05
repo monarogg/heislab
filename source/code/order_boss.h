@@ -1,6 +1,8 @@
 #pragma once
 #include "../driver/elevio.h"
 #include "state_machine.h"
+#include "lights.h"
+#include "location.h"
 
 
 //litt usikker på om vi trenger denne???
@@ -20,3 +22,8 @@ void empty_orders(Elevator *e);
 void check_buttons(Elevator *e);
 
 void check_orders(Elevator *e);
+
+void move_up(Elevator *e);
+
+void move_down(Elevator *e);
+

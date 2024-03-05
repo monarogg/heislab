@@ -17,6 +17,7 @@ typedef struct {
     int destination;
     int last_floor;
     int moving;
+    int open_door;
     int queue[N_FLOORS][N_BUTTONS];
     
 } Elevator;
