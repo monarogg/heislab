@@ -6,6 +6,6 @@
 #include "location.h"
 
 
-int check_emergency(Elevator *e);
+void check_emergency(Elevator *e);
 
-int check_obstruction(Elevator *e);
+void check_obstruction(Elevator *e);

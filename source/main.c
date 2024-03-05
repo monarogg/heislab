@@ -7,6 +7,7 @@
 #include "code/door.h"
 #include "code/order_boss.h"
 #include "code/location.h"
+#include "code/stop.h"
 
 
 
@@ -28,41 +29,52 @@ int main(){
 
     elevio_doorOpenLamp(0);
 
+    for (int f = 0; f < N_FLOORS; f++){
+        for (int b = 0; b < N_BUTTONS; b++){
+            elevio_buttonLamp(f, b, 0);
+        }
+    }
+    
     while(1){
+
 
     //skal vi kanskje ikke sjekke disse før etter at har nådd start tilstand?
     check_buttons(&elevator);
     check_orders(&elevator);
     check_emergency(&elevator);
-    check_obstruction(&elevator);    
+       
 
     switch (elevator.state)
     {
 
     case moving_down:
+        //move_down(&elevator);
         elevio_motorDirection(DIRN_DOWN);
         if (elevator.destination == elevio_floorSensor()) {
             elevio_motorDirection(DIRN_STOP);
             elevator.current_floor = elevator.destination;
             elevator.state = still;
         }
+        elevator.state = still;
         check_buttons(&elevator);
         check_orders(&elevator);
         check_emergency(&elevator);
-        check_obstruction(&elevator);    
+          
         break;
 
     case moving_up:
+        //move_up(&elevator);
         elevio_motorDirection(DIRN_UP);
         if (elevator.destination == elevio_floorSensor()) {
             elevio_motorDirection(DIRN_STOP);
             elevator.current_floor = elevator.destination;
             elevator.state = still;
         }
+        elevator.state = still;
         check_buttons(&elevator);
         check_orders(&elevator);
         check_emergency(&elevator);
-        check_obstruction(&elevator);
+
         break;
 
     case initial:
@@ -73,7 +85,7 @@ int main(){
         check_buttons(&elevator);
         check_orders(&elevator);
         check_emergency(&elevator);
-        check_obstruction(&elevator);
+
         break;
 
     case still:
@@ -86,7 +98,6 @@ int main(){
         check_buttons(&elevator);
         check_orders(&elevator);
         check_emergency(&elevator);
-        check_obstruction(&elevator);
         break;
 
     case inactive:
@@ -95,7 +106,7 @@ int main(){
         compare_floors(&elevator);
         check_orders(&elevator);
         check_emergency(&elevator);
-        check_obstruction(&elevator);
+        
         break;
 
 
