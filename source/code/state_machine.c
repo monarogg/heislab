@@ -1,7 +1,6 @@
 #include "state_machine.h"
 
 void initial_position(Elevator *e) {
-    //skru av alle lys
     while (elevio_floorSensor() != 0) {
         elevio_motorDirection(DIRN_DOWN);
     }
@@ -10,7 +9,7 @@ void initial_position(Elevator *e) {
         e->current_floor = 0;
     }
     e->state = still;
-    //printf("%d", e->state);
+    
 }
 
 

@@ -14,7 +14,6 @@ void add_order(int floor, int number, Elevator *e){
 
 
 void remove_order(int floor, Elevator *e) {
-    //fordi fjerner alle orders fra samme etasje
     for(int b = 0; b < N_BUTTONS; b++){
         e->queue[floor][b] = 0;
         elevio_buttonLamp(floor, b, 0);
@@ -29,7 +28,6 @@ void empty_orders(Elevator *e){
             e->queue[f][b] = 0;
             elevio_buttonLamp(f, b, 0);
         }
-        //elevio_floorIndicator(f); kanskje ikke denne?
 
     
     }
@@ -92,8 +90,8 @@ void move_up(Elevator *e) {
         check_emergency(e);
         
         for (int f = 0; f < N_FLOORS; f++) {
-            floor = elevio_floorSensor();
-            if ((e->queue[f][0] == 1) && (floor < f) && (f <= e->destination)) {
+            floor = e->last_floor;
+            if (((e->queue[f][0] == 1) && (floor < f) && (f <= e->destination)) || ((e->queue[f][2] == 1) && (floor < f) && (f <= e->destination))) {
                 e->destination = f;
                 if (elevio_floorSensor() == f) {
                     elevio_floorIndicator(f);
@@ -101,6 +99,16 @@ void move_up(Elevator *e) {
                     open_door(e);
                 }
             }
+            //noe nytt:
+            /* if ((e->queue[f][2] == 1) && (floor < f) && (f <= e->destination)) {
+                e->destination = f;
+                if (elevio_floorSensor() == f) {
+                    elevio_floorIndicator(f);
+                    elevio_motorDirection(DIRN_STOP);
+                    open_door(e);
+                }
+            } */
+
         }
         
         floor = elevio_floorSensor();
@@ -133,8 +141,8 @@ void move_down(Elevator *e) {
         check_emergency(e);
         
         for (int f = 0; f < N_FLOORS; f++) {
-            floor = elevio_floorSensor();
-            if ((e->queue[f][1] == 1) && (floor > f) && (f >= e->destination)) {
+            floor = e->last_floor;
+            if (((e->queue[f][1] == 1) && (floor > f) && (f >= e->destination)) || ((e->queue[f][2] == 1) && (floor > f) && (f >= e->destination))) {
                 e->destination = f;
                 if (elevio_floorSensor() == f) {
                     elevio_floorIndicator(f);
@@ -142,6 +150,16 @@ void move_down(Elevator *e) {
                     open_door(e);
                 }
             }
+
+            //noe nytt:
+            /* if ((e->queue[f][2] == 1) && (floor > f) && (f >= e->destination)) {
+                e->destination = f;
+                if (elevio_floorSensor() == f) {
+                    elevio_floorIndicator(f);
+                    elevio_motorDirection(DIRN_STOP);
+                    open_door(e);
+                }
+            } */
         }
         floor = elevio_floorSensor();
         elevio_motorDirection(DIRN_DOWN); 

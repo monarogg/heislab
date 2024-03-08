@@ -2,7 +2,7 @@
 #include "state_machine.h"
 #include "timer.h"
 
-void check_emergency(Elevator *e) {  //evt gjøres om til en void??
+void check_emergency(Elevator *e) {  
     if (elevio_stopButton() == 1) {
         elevio_motorDirection(DIRN_STOP);
         empty_orders(e);
@@ -12,13 +12,14 @@ void check_emergency(Elevator *e) {  //evt gjøres om til en void??
 
             if (elevio_floorSensor() != -1) {
                 elevio_doorOpenLamp(1);
-                //check_obstruction(e);
+
             }
         }
         elevio_stopLamp(0);
 
         if (elevio_floorSensor() == -1) {
-            e->state = initial;
+            initial_position(e);
+            empty_orders(e);
         }
         if (elevio_floorSensor() != -1) {
             start_timer(e);
@@ -27,12 +28,3 @@ void check_emergency(Elevator *e) {  //evt gjøres om til en void??
         }
     }
 }
-
-// void check_obstruction(Elevator *e) {
-//     int obstruction = elevio_obstruction();
-//     while (obstruction == 1) {
-//         elevio_doorOpenLamp(1);
-//         obstruction = elevio_obstruction();
-//     }
-//         start_timer(e);
-// }
