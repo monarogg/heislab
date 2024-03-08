@@ -5,7 +5,7 @@
 
 
 void start_timer(Elevator *e){
-    //int obstruction = elevio_obstruction();
+    int obstruction = elevio_obstruction();
 
 
     time_t start;
@@ -18,15 +18,15 @@ void start_timer(Elevator *e){
 
     while (difftime(end, start) < 3.0)
     {
-        //obstruction = elevio_obstruction();
+        obstruction = elevio_obstruction();
         time(&end);
         check_buttons(e);
         check_orders(e);
-        // if (obstruction) {
-        //     time(&start);
-        // }
-
-        //legg til noe for obstruction
+        while (obstruction) {
+            obstruction = elevio_obstruction();
+            // skal vi legge til check_buttons her? skal den ta bestilling?
+            time(&start);
+        }
     }
     
     //lukker dør:

@@ -1,6 +1,7 @@
 #include "order_boss.h"
 #include "state_machine.h"
 #include "stop.h"
+#include "door.h"
 
 
 void add_order(int floor, int number, Elevator *e){
@@ -85,34 +86,36 @@ void move_up(Elevator *e) {
         }
         if (elevio_floorSensor() != -1) {
             e->last_floor = floor;
-            //e->state = moving_up; // kan hende dette gir problemer ettersom det er en case i switch??
+           
         }
         check_buttons(e);
         check_emergency(e);
         
         for (int f = 0; f < N_FLOORS; f++) {
-            if ((e->queue[f][0] == 1) && (e->current_floor < f) && (f <= e->destination)) {
+            floor = elevio_floorSensor();
+            if ((e->queue[f][0] == 1) && (floor < f) && (f <= e->destination)) {
                 e->destination = f;
                 if (elevio_floorSensor() == f) {
                     elevio_floorIndicator(f);
                     elevio_motorDirection(DIRN_STOP);
-                    e->state = still;
+                    open_door(e);
                 }
             }
         }
+        
         floor = elevio_floorSensor();
         elevio_motorDirection(DIRN_UP); 
         if (floor == e->destination) {
             elevio_floorIndicator(floor);
             elevio_motorDirection(DIRN_STOP);
             e->current_floor = e->destination;
-            e->state = still;
-            // evt : legge inn funksjonaliteten fra still her.
-            remove_order(e->current_floor, e);  //fjerne bestillinger for denne etasjen
+            open_door(e);
+            remove_order(elevio_floorSensor(), e);  //fjerne bestillinger for denne etasjen
 
             break;
         }
     }
+    e->state = still;
 }
 
 void move_down(Elevator *e) {
@@ -124,18 +127,19 @@ void move_down(Elevator *e) {
         }
         if (elevio_floorSensor() != -1) {
             e->last_floor = floor;
-            //e->state = moving_down; // kan hende dette gir problemer ettersom det er en case i switch??
+            
         }
         check_buttons(e);
         check_emergency(e);
         
         for (int f = 0; f < N_FLOORS; f++) {
-            if ((e->queue[f][1] == 1) && (e->current_floor > f) && (f >= e->destination)) {
+            floor = elevio_floorSensor();
+            if ((e->queue[f][1] == 1) && (floor > f) && (f >= e->destination)) {
                 e->destination = f;
                 if (elevio_floorSensor() == f) {
                     elevio_floorIndicator(f);
                     elevio_motorDirection(DIRN_STOP);
-                    e->state = still;
+                    open_door(e);
                 }
             }
         }
@@ -145,12 +149,11 @@ void move_down(Elevator *e) {
             elevio_floorIndicator(floor);
             elevio_motorDirection(DIRN_STOP);
             e->current_floor = e->destination;
-            e->state = still;
-            // evt : legge inn funksjonaliteten fra still her.
-            remove_order(e->current_floor, e);  //fjerne bestillinger for denne etasjen
-            //printf("er knappen slettet? %d", e->queue[e->current_floor][0]); // for å se om bestillng er fjernet
+            open_door(e);
+            remove_order(e->current_floor, e);  //fjerne bestillinger for denne etasje
 
             break;
         }
     }
+    e->state = still;
 }

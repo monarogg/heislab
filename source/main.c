@@ -48,8 +48,8 @@ int main(){
     {
 
     case moving_down:
-        //move_down(&elevator);
-        elevio_motorDirection(DIRN_DOWN);
+        move_down(&elevator);
+        /* elevio_motorDirection(DIRN_DOWN);
         if (elevator.destination == elevio_floorSensor()) {
             elevio_motorDirection(DIRN_STOP);
             elevator.current_floor = elevator.destination;
@@ -58,13 +58,13 @@ int main(){
         elevator.state = still;
         check_buttons(&elevator);
         check_orders(&elevator);
-        check_emergency(&elevator);
+        check_emergency(&elevator); */
           
         break;
 
     case moving_up:
-        //move_up(&elevator);
-        elevio_motorDirection(DIRN_UP);
+        move_up(&elevator);
+        /* elevio_motorDirection(DIRN_UP);
         if (elevator.destination == elevio_floorSensor()) {
             elevio_motorDirection(DIRN_STOP);
             elevator.current_floor = elevator.destination;
@@ -73,7 +73,7 @@ int main(){
         elevator.state = still;
         check_buttons(&elevator);
         check_orders(&elevator);
-        check_emergency(&elevator);
+        check_emergency(&elevator); */
 
         break;
 

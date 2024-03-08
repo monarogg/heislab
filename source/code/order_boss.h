@@ -5,6 +5,7 @@
 #include "location.h"
 
 
+
 //litt usikker på om vi trenger denne???
 typedef enum {
     order_up = 1,

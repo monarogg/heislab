@@ -6,6 +6,10 @@
 
 void open_door(Elevator *e){
     elevio_doorOpenLamp(1);
-    //check_obstruction(e);
+    int obstruction = elevio_obstruction();
+    while (obstruction == 1) {
+        elevio_doorOpenLamp(1);
+        obstruction = elevio_obstruction();
+    }
     start_timer(e);
 }
