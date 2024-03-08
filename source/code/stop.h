@@ -7,5 +7,3 @@
 
 
 void check_emergency(Elevator *e);
-
-void check_obstruction(Elevator *e);

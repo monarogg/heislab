@@ -2,6 +2,8 @@
 #include "state_machine.h"
 #include "stop.h"
 #include "door.h"
+#include <stdio.h>
+
 
 
 void add_order(int floor, int number, Elevator *e){
@@ -23,6 +25,7 @@ void remove_order(int floor, Elevator *e) {
 
 
 void empty_orders(Elevator *e){
+    printf("Emptying orders :)\n");
     
     for (int f = 0; f < N_FLOORS; f++){
         for (int b = 0; b < N_BUTTONS; b++){
@@ -33,6 +36,8 @@ void empty_orders(Elevator *e){
 
     
     }
+    e->destination = 0; //should go to first
+    
 }
 
 void check_buttons(Elevator *e) {
@@ -93,7 +98,7 @@ void move_up(Elevator *e) {
         
         for (int f = 0; f < N_FLOORS; f++) {
             floor = elevio_floorSensor();
-            if ((e->queue[f][0] == 1) && (floor < f) && (f <= e->destination)) {
+            if (((e->queue[f][0] == 1) && (floor < f) && (f <= e->destination)) || ((e->queue[f][2] == 1) && (floor < f) && (f <= e->destination))) {
                 e->destination = f;
                 if (elevio_floorSensor() == f) {
                     elevio_floorIndicator(f);
@@ -134,7 +139,7 @@ void move_down(Elevator *e) {
         
         for (int f = 0; f < N_FLOORS; f++) {
             floor = elevio_floorSensor();
-            if ((e->queue[f][1] == 1) && (floor > f) && (f >= e->destination)) {
+            if (((e->queue[f][1] == 1) && (floor > f) && (f >= e->destination)) || ((e->queue[f][2] == 1) && (floor > f) && (f >= e->destination))) {
                 e->destination = f;
                 if (elevio_floorSensor() == f) {
                     elevio_floorIndicator(f);

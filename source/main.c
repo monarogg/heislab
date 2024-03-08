@@ -34,7 +34,7 @@ int main(){
             elevio_buttonLamp(f, b, 0);
         }
     }
-    
+    printf("WOHOOO\n");
     while(1){
 
 

@@ -9,6 +9,7 @@ void initial_position(Elevator *e) {
         elevio_motorDirection(DIRN_STOP);
         e->current_floor = 0;
     }
+    elevio_floorIndicator(0);
     e->state = still;
     //printf("%d", e->state);
 }
